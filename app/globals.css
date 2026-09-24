@@ -1,26 +1,94 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-paper: #f6f3ec;
+  --color-paper-2: #fbf9f4;
+  --color-surface: #ffffff;
+  --color-sand: #ebe6da;
+  --color-line: #e4ded2;
+  --color-line-soft: #efeae0;
+  --color-ink: #1b1a17;
+  --color-ink-2: #2b2a26;
+  --color-muted: #5e5a52;
+  --color-muted-2: #6f6a60;
+  --color-muted-3: #4a463f;
+  --color-jade: #1f6f54;
+  --color-jade-soft: #e3efe9;
+  --color-jade-text: #174f3c;
+  --color-live: #2e9c6a;
+  --color-brick: #b23a2b;
+  --color-brick-soft: #f8e4e0;
+  --color-brick-text: #9a2f22;
+  --color-amber: #d49b2c;
+  --color-amber-soft: #f7ebd3;
+  --color-amber-text: #8a5a12;
+
+  --color-food: #f3e4d3;
+  --color-food-fg: #8a4b14;
+  --color-stay: #e1e8f0;
+  --color-stay-fg: #2f4a6b;
+  --color-travel: #e4ede2;
+  --color-travel-fg: #2f5a3a;
+  --color-fun: #efe2ee;
+  --color-fun-fg: #6b3566;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--color-paper);
+  --color-paper-2: var(--color-paper-2);
+  --color-surface: var(--color-surface);
+  --color-sand: var(--color-sand);
+  --color-line: var(--color-line);
+  --color-line-soft: var(--color-line-soft);
+  --color-ink: var(--color-ink);
+  --color-ink-2: var(--color-ink-2);
+  --color-muted: var(--color-muted);
+  --color-muted-2: var(--color-muted-2);
+  --color-muted-3: var(--color-muted-3);
+  --color-jade: var(--color-jade);
+  --color-jade-soft: var(--color-jade-soft);
+  --color-jade-text: var(--color-jade-text);
+  --color-live: var(--color-live);
+  --color-brick: var(--color-brick);
+  --color-brick-soft: var(--color-brick-soft);
+  --color-brick-text: var(--color-brick-text);
+  --color-amber: var(--color-amber);
+  --color-amber-soft: var(--color-amber-soft);
+  --color-amber-text: var(--color-amber-text);
+  --color-food: var(--color-food);
+  --color-food-fg: var(--color-food-fg);
+  --color-stay: var(--color-stay);
+  --color-stay-fg: var(--color-stay-fg);
+  --color-travel: var(--color-travel);
+  --color-travel-fg: var(--color-travel-fg);
+  --color-fun: var(--color-fun);
+  --color-fun-fg: var(--color-fun-fg);
+
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-manrope);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tabular-money {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Hide scrollbars on horizontally-scrolling chip rows while keeping them scrollable. */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }

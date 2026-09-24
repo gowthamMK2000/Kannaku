@@ -32,9 +32,14 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
+
+# local Claude Code tooling config (e.g. browser-preview launch config) —
+# not part of the app, no need for other environments/collaborators to have it
+.claude/
 
 # typescript
 *.tsbuildinfo
