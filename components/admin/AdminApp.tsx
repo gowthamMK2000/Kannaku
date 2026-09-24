@@ -410,25 +410,40 @@ export default function AdminApp({ data, friendUrl }: { data: TripData; friendUr
         </button>
       )}
 
-      <nav aria-label="Sections" className="relative z-[2] grid shrink-0 grid-cols-3 border-t border-line bg-surface px-2 pb-[22px] pt-1.5">
-        <button type="button" onClick={() => setTab("ledger")} className="flex flex-col items-center justify-center gap-0.5 py-1 text-xs font-extrabold" style={{ color: tab === "ledger" ? "var(--color-jade)" : "var(--color-muted-2)" }}>
+      <nav aria-label="Sections" className="relative z-[2] grid shrink-0 grid-cols-3 gap-1 bg-surface px-3 pb-[22px] pt-2.5 shadow-[0_-8px_20px_rgba(27,26,23,0.06)]">
+        <button
+          type="button"
+          onClick={() => setTab("ledger")}
+          className="flex flex-col items-center justify-center gap-0.5 rounded-2xl py-2 text-xs font-extrabold transition-colors"
+          style={{ background: tab === "ledger" ? "var(--color-jade-soft)" : "transparent", color: tab === "ledger" ? "var(--color-jade)" : "var(--color-muted-2)" }}
+        >
           <ExpensesNavIcon />
           Ledger
         </button>
-        <button type="button" onClick={() => setTab("debts")} className="relative flex flex-col items-center justify-center gap-0.5 py-1 text-xs font-extrabold" style={{ color: tab === "debts" ? "var(--color-jade)" : "var(--color-muted-2)" }}>
+        <button
+          type="button"
+          onClick={() => setTab("debts")}
+          className="relative flex flex-col items-center justify-center gap-0.5 rounded-2xl py-2 text-xs font-extrabold transition-colors"
+          style={{ background: tab === "debts" ? "var(--color-jade-soft)" : "transparent", color: tab === "debts" ? "var(--color-jade)" : "var(--color-muted-2)" }}
+        >
           <OwesNavIcon />
           Debts
           {debtors.length > 0 && (
-            <span className="absolute left-1/2 top-0.5 ml-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-brick px-1 text-[11px] font-extrabold text-white">
+            <span className="absolute right-1/4 top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-brick px-1 text-[11px] font-extrabold text-white">
               {debtors.length}
             </span>
           )}
         </button>
-        <button type="button" onClick={() => setTab("badcop")} className="relative flex flex-col items-center justify-center gap-0.5 py-1 text-xs font-extrabold" style={{ color: tab === "badcop" ? "var(--color-jade)" : "var(--color-muted-2)" }}>
+        <button
+          type="button"
+          onClick={() => setTab("badcop")}
+          className="relative flex flex-col items-center justify-center gap-0.5 rounded-2xl py-2 text-xs font-extrabold transition-colors"
+          style={{ background: tab === "badcop" ? "var(--color-jade-soft)" : "transparent", color: tab === "badcop" ? "var(--color-jade)" : "var(--color-muted-2)" }}
+        >
           <BadCopNavIcon />
           Bad Cop
           {botStatus === "disconnected" && (
-            <span className="absolute left-1/2 top-0.5 ml-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-brick px-1 text-[11px] font-extrabold text-white">!</span>
+            <span className="absolute right-1/4 top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-brick px-1 text-[11px] font-extrabold text-white">!</span>
           )}
         </button>
       </nav>

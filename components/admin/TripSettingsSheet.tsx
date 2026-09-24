@@ -143,7 +143,8 @@ export default function TripSettingsSheet({
 
   return (
     <div className="absolute inset-0 z-30">
-      <div role="dialog" aria-label="Trip settings" className="absolute inset-x-0 bottom-0 top-11 flex flex-col overflow-hidden rounded-t-[28px] bg-paper-2">
+      <button type="button" aria-label="Close" onClick={onClose} className="absolute inset-0 h-full w-full bg-ink/50" />
+      <div role="dialog" aria-label="Trip settings" className="absolute inset-x-0 bottom-0 top-3 flex flex-col overflow-hidden rounded-t-[28px] bg-paper-2">
         <div className="flex shrink-0 items-center justify-between px-5 pb-1.5 pt-4">
           <h2 className="font-display text-2xl font-semibold">Trip setup</h2>
           <button type="button" aria-label="Close" onClick={onClose} className="flex h-11 w-11 items-center justify-center rounded-full bg-sand">
