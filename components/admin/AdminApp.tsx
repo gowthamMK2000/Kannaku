@@ -513,8 +513,10 @@ function BadCopTab({
   botDown: boolean;
   onOpenConnection: () => void;
 }) {
-  const [phase, setPhase] = useState<"idle" | "confirm" | "sending" | "sent" | "error">("idle");
+  const [phase, setPhase] = useState<"idle" | "confirm" | "sending" | "sent" | "empty" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
+  const [emptyMessage, setEmptyMessage] = useState<string | null>(null);
+  const nothingToSend = debtorsCount === 0;
 
   async function send() {
     setPhase("sending");
@@ -523,6 +525,13 @@ function BadCopTab({
       const res = await fetch("/api/bad-cop", { method: "POST" });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed to send.");
+      // The route returns 200 with sent:false when there's nobody to nudge —
+      // res.ok alone doesn't mean a message actually went out.
+      if (!json.sent) {
+        setEmptyMessage(json.message ?? "Nothing to send right now.");
+        setPhase("empty");
+        return;
+      }
       setPhase("sent");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to send.");
@@ -542,9 +551,9 @@ function BadCopTab({
           <button
             type="button"
             onClick={() => setPhase("confirm")}
-            disabled={botDown}
+            disabled={botDown || nothingToSend}
             className="flex h-16 items-center justify-center gap-2.5 rounded-2xl text-lg font-extrabold text-white"
-            style={{ background: botDown ? "#B9B2A5" : "#B23A2B" }}
+            style={{ background: botDown || nothingToSend ? "#B9B2A5" : "#B23A2B" }}
           >
             <SendIcon />
             Send Bad Cop ping
@@ -554,6 +563,7 @@ function BadCopTab({
               WhatsApp is offline — reconnect first
             </button>
           )}
+          {!botDown && nothingToSend && <span className="text-sm text-muted">Nobody owes anything right now — nothing to send.</span>}
           {error && <div className="rounded-xl bg-brick-soft px-4 py-3 text-sm font-bold text-[#9A2F22]">{error}</div>}
         </>
       )}
@@ -582,6 +592,15 @@ function BadCopTab({
           <CheckIcon width={22} height={22} />
           <span className="grow font-extrabold">Sent to the group</span>
           <button type="button" onClick={() => setPhase("idle")} className="h-11 rounded-[10px] border border-jade px-3 text-[13px] font-extrabold text-jade-text">
+            Done
+          </button>
+        </div>
+      )}
+
+      {phase === "empty" && (
+        <div className="flex items-center gap-3 rounded-2xl bg-sand px-4 py-3.5 text-muted-3">
+          <span className="grow font-extrabold">{emptyMessage}</span>
+          <button type="button" onClick={() => setPhase("idle")} className="h-11 rounded-[10px] border border-[#4A4842] px-3 text-[13px] font-extrabold text-muted-3">
             Done
           </button>
         </div>
