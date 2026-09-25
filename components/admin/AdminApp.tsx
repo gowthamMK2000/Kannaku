@@ -534,7 +534,7 @@ function BadCopTab({
     <div className="flex flex-col gap-4 px-4 pb-6 pt-4">
       <div className="flex flex-col gap-0.5">
         <h1 className="font-display text-[26px] font-semibold">Bad Cop</h1>
-        <span className="text-sm text-muted">Posts pending dues to your WhatsApp group.</span>
+        <span className="text-sm text-muted">Nudges the group about who still owes what.</span>
       </div>
 
       {(phase === "idle" || phase === "error") && (
@@ -562,7 +562,7 @@ function BadCopTab({
         <div className="flex flex-col gap-2.5 rounded-2xl bg-ink p-4 text-paper">
           <span className="text-base font-extrabold">Send the Bad Cop ping to the group?</span>
           <span className="text-[13px] text-[#CFC9BC]">
-            {debtorsCount} {debtorsCount === 1 ? "person" : "people"} pending, {inr(unsettledTotal)} total. This can&apos;t be unsent.
+            {debtorsCount} {debtorsCount === 1 ? "person" : "people"} pending, {inr(unsettledTotal)} total — this&apos;ll post straight to the group.
           </span>
           <div className="flex gap-2">
             <button type="button" onClick={() => setPhase("idle")} className="h-12 grow rounded-xl border border-[#4A4842] font-bold text-paper">

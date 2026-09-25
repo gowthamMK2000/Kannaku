@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
   const lines = debtors.map((u) => `${u.name} — ${inr(owed[u.id] ?? 0)}`);
   const text = [
     `*Pending dues — ${settings.trip_name}*`,
-    "Please clear these today:",
+    "Friendly reminder — here's what's still open:",
     "",
     ...lines,
     "",
