@@ -395,7 +395,14 @@ export default function AdminApp({ data, friendUrl }: { data: TripData; friendUr
         )}
 
         {tab === "badcop" && (
-          <BadCopTab settings={settings} debtorsCount={debtors.length} unsettledTotal={balances.unsettledTotal} botDown={botStatus === "disconnected"} onOpenConnection={() => setShowConnection(true)} />
+          <BadCopTab
+            settings={settings}
+            hasExpenses={expenses.length > 0}
+            debtorsCount={debtors.length}
+            unsettledTotal={balances.unsettledTotal}
+            botDown={botStatus === "disconnected"}
+            onOpenConnection={() => setShowConnection(true)}
+          />
         )}
       </div>
 
@@ -502,27 +509,33 @@ export default function AdminApp({ data, friendUrl }: { data: TripData; friendUr
 
 function BadCopTab({
   settings,
+  hasExpenses,
   debtorsCount,
   unsettledTotal,
   botDown,
   onOpenConnection,
 }: {
   settings: TripData["settings"];
+  hasExpenses: boolean;
   debtorsCount: number;
   unsettledTotal: number;
   botDown: boolean;
   onOpenConnection: () => void;
 }) {
   const [phase, setPhase] = useState<"idle" | "confirm" | "sending" | "sent" | "empty" | "error">("idle");
+  const [mode, setMode] = useState<"quick" | "final">("quick");
   const [error, setError] = useState<string | null>(null);
   const [emptyMessage, setEmptyMessage] = useState<string | null>(null);
-  const nothingToSend = debtorsCount === 0;
+  // "Final tally" nudges specific debtors, so it needs someone to owe money.
+  // "Quick update" and the pre-expense fund-check are just informational —
+  // always sendable once the bot's connected.
+  const nothingToSend = hasExpenses && mode === "final" && debtorsCount === 0;
 
   async function send() {
     setPhase("sending");
     setError(null);
     try {
-      const res = await fetch("/api/bad-cop", { method: "POST" });
+      const res = await fetch("/api/bad-cop", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode }) });
       const json = await res.json();
       if (!res.ok) throw new Error(json.error || "Failed to send.");
       // The route returns 200 with sent:false when there's nobody to nudge —
@@ -543,11 +556,26 @@ function BadCopTab({
     <div className="flex flex-col gap-4 px-4 pb-6 pt-4">
       <div className="flex flex-col gap-0.5">
         <h1 className="font-display text-[26px] font-semibold">Bad Cop</h1>
-        <span className="text-sm text-muted">Nudges the group about who still owes what.</span>
+        <span className="text-sm text-muted">
+          {hasExpenses ? "Nudges the group about spending and who still owes what." : "Posts a fund-check update to the group."}
+        </span>
       </div>
 
       {(phase === "idle" || phase === "error") && (
         <>
+          {hasExpenses && (
+            <div className="grid grid-cols-2 gap-1 rounded-2xl bg-sand p-1">
+              {(["quick", "final"] as const).map((m) => {
+                const on = mode === m;
+                return (
+                  <label key={m} className="relative flex h-11 items-center justify-center rounded-[10px] text-sm font-extrabold" style={{ background: on ? "#FFFFFF" : "transparent", boxShadow: on ? "0 1px 3px rgba(27,26,23,0.12)" : "none" }}>
+                    <input type="radio" name="badCopMode" checked={on} onChange={() => setMode(m)} className="absolute h-px w-px opacity-0" />
+                    {m === "quick" ? "Quick update" : "Final tally"}
+                  </label>
+                );
+              })}
+            </div>
+          )}
           <button
             type="button"
             onClick={() => setPhase("confirm")}
@@ -556,7 +584,7 @@ function BadCopTab({
             style={{ background: botDown || nothingToSend ? "#B9B2A5" : "#B23A2B" }}
           >
             <SendIcon />
-            Send Bad Cop ping
+            {!hasExpenses ? "Send fund check" : mode === "quick" ? "Send quick update" : "Send final tally"}
           </button>
           {botDown && (
             <button type="button" onClick={onOpenConnection} className="min-h-11 self-start font-extrabold text-[#9A2F22]">
@@ -570,9 +598,13 @@ function BadCopTab({
 
       {phase === "confirm" && (
         <div className="flex flex-col gap-2.5 rounded-2xl bg-ink p-4 text-paper">
-          <span className="text-base font-extrabold">Send the Bad Cop ping to the group?</span>
+          <span className="text-base font-extrabold">Send this to the group?</span>
           <span className="text-[13px] text-[#CFC9BC]">
-            {debtorsCount} {debtorsCount === 1 ? "person" : "people"} pending, {inr(unsettledTotal)} total — this&apos;ll post straight to the group.
+            {!hasExpenses
+              ? "Posts who's paid in advance and the fund-check total — this'll post straight to the group."
+              : mode === "quick"
+                ? "Posts total spent and pool remaining — no one's called out by name."
+                : `${debtorsCount} ${debtorsCount === 1 ? "person" : "people"} pending, ${inr(unsettledTotal)} total — this'll post straight to the group.`}
           </span>
           <div className="flex gap-2">
             <button type="button" onClick={() => setPhase("idle")} className="h-12 grow rounded-xl border border-[#4A4842] font-bold text-paper">
