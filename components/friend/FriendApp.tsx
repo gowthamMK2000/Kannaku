@@ -712,7 +712,7 @@ function BottomNav({ screen, onChange }: { screen: Screen; onChange: (s: Screen)
     { key: "owes", label: "Who owes", Icon: OwesNavIcon },
   ];
   return (
-    <nav aria-label="Sections" className="grid shrink-0 grid-cols-3 gap-1 bg-surface px-3 pb-[22px] pt-2.5 shadow-[0_-8px_20px_rgba(27,26,23,0.06)]">
+    <nav aria-label="Sections" className="grid shrink-0 grid-cols-3 gap-1 bg-surface px-3 pb-2 pt-1.5 shadow-[0_-8px_20px_rgba(27,26,23,0.06)]">
       {items.map(({ key, label, Icon }) => {
         const on = screen === key;
         return (
@@ -720,10 +720,10 @@ function BottomNav({ screen, onChange }: { screen: Screen; onChange: (s: Screen)
             key={key}
             type="button"
             onClick={() => onChange(key)}
-            className="flex flex-col items-center justify-center gap-0.5 rounded-2xl py-2 text-xs font-bold transition-colors"
+            className="flex flex-col items-center justify-center gap-0.5 rounded-2xl py-1.5 text-xs font-bold transition-colors"
             style={{ background: on ? "var(--color-jade-soft)" : "transparent", color: on ? "var(--color-jade)" : "var(--color-muted-2)" }}
           >
-            <Icon />
+            <Icon width={18} height={18} />
             {label}
           </button>
         );

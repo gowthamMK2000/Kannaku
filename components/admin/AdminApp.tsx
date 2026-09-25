@@ -410,23 +410,23 @@ export default function AdminApp({ data, friendUrl }: { data: TripData; friendUr
         </button>
       )}
 
-      <nav aria-label="Sections" className="relative z-[2] grid shrink-0 grid-cols-3 gap-1 bg-surface px-3 pb-[22px] pt-2.5 shadow-[0_-8px_20px_rgba(27,26,23,0.06)]">
+      <nav aria-label="Sections" className="relative z-[2] grid shrink-0 grid-cols-3 gap-1 bg-surface px-3 pb-2 pt-1.5 shadow-[0_-8px_20px_rgba(27,26,23,0.06)]">
         <button
           type="button"
           onClick={() => setTab("ledger")}
-          className="flex flex-col items-center justify-center gap-0.5 rounded-2xl py-2 text-xs font-extrabold transition-colors"
+          className="flex flex-col items-center justify-center gap-0.5 rounded-2xl py-1.5 text-xs font-extrabold transition-colors"
           style={{ background: tab === "ledger" ? "var(--color-jade-soft)" : "transparent", color: tab === "ledger" ? "var(--color-jade)" : "var(--color-muted-2)" }}
         >
-          <ExpensesNavIcon />
+          <ExpensesNavIcon width={18} height={18} />
           Ledger
         </button>
         <button
           type="button"
           onClick={() => setTab("debts")}
-          className="relative flex flex-col items-center justify-center gap-0.5 rounded-2xl py-2 text-xs font-extrabold transition-colors"
+          className="relative flex flex-col items-center justify-center gap-0.5 rounded-2xl py-1.5 text-xs font-extrabold transition-colors"
           style={{ background: tab === "debts" ? "var(--color-jade-soft)" : "transparent", color: tab === "debts" ? "var(--color-jade)" : "var(--color-muted-2)" }}
         >
-          <OwesNavIcon />
+          <OwesNavIcon width={18} height={18} />
           Debts
           {debtors.length > 0 && (
             <span className="absolute right-1/4 top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-brick px-1 text-[11px] font-extrabold text-white">
@@ -437,10 +437,10 @@ export default function AdminApp({ data, friendUrl }: { data: TripData; friendUr
         <button
           type="button"
           onClick={() => setTab("badcop")}
-          className="relative flex flex-col items-center justify-center gap-0.5 rounded-2xl py-2 text-xs font-extrabold transition-colors"
+          className="relative flex flex-col items-center justify-center gap-0.5 rounded-2xl py-1.5 text-xs font-extrabold transition-colors"
           style={{ background: tab === "badcop" ? "var(--color-jade-soft)" : "transparent", color: tab === "badcop" ? "var(--color-jade)" : "var(--color-muted-2)" }}
         >
-          <BadCopNavIcon />
+          <BadCopNavIcon width={18} height={18} />
           Bad Cop
           {botStatus === "disconnected" && (
             <span className="absolute right-1/4 top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-brick px-1 text-[11px] font-extrabold text-white">!</span>
