@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { settings, users, expenses, deposits, payouts } = await getTripData();
-  const { owed, unsettledTotal } = computeBalances(expenses, users, deposits, payouts);
+  const { owed, unsettledTotal, spent, pool } = computeBalances(expenses, users, deposits, payouts);
   const debtors = users
     .filter((u) => (owed[u.id] ?? 0) > 0)
     .sort((a, b) => (owed[b.id] ?? 0) - (owed[a.id] ?? 0));
@@ -33,16 +33,23 @@ export async function POST(req: NextRequest) {
   }
 
   const lines = debtors.map((u) => `${u.name} — ${inr(owed[u.id] ?? 0)}`);
+  const poolLine = pool >= 0 ? `Pool left: ${inr(pool)}` : `Pool is ${inr(Math.abs(pool))} short`;
+  const totalLine = `Total: ${inr(unsettledTotal)}${settings.banker_upi_id ? ` → ${settings.banker_upi_id}` : ""}`;
+  // `.filter((line) => line !== null)`, not `.filter(Boolean)` — the blank
+  // strings below are intentional spacer lines, and Boolean("") is false,
+  // so the old filter was silently collapsing every one of them.
   const text = [
-    `*Pending dues — ${settings.trip_name}*`,
-    "Friendly reminder — here's what's still open:",
+    `📋 *Trip tally — ${settings.trip_name}${settings.trip_dates ? ` (${settings.trip_dates})` : ""}*`,
+    `Spent: ${inr(spent)} · ${poolLine}`,
     "",
+    "A gentle heads-up for:",
     ...lines,
     "",
-    `Total pending: ${inr(unsettledTotal)}`,
-    settings.banker_upi_id ? `Pay the banker: ${settings.banker_upi_id}` : null,
+    totalLine,
+    "",
+    "Settle up so the pool doesn't cry 💸",
   ]
-    .filter(Boolean)
+    .filter((line) => line !== null)
     .join("\n");
 
   try {
